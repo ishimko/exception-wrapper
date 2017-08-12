@@ -7,17 +7,20 @@ import java.util.function.Supplier;
 
 public class ExceptionWrapper {
     @SafeVarargs
-    public static <T> Callable<T> fromChecked(Callable<T> callable, WrappingConfiguration<Exception, Exception>... configurations) {
+    public static <T> Callable<T> fromChecked(Callable<T> callable,
+                                              WrappingConfiguration<? extends Exception, ? extends Exception>... configurations) {
         return new CheckedExceptionWrapper<>(callable, configurations);
     }
 
     @SafeVarargs
-    public static <T> Supplier<T> fromUnchecked(Supplier<T> supplier, WrappingConfiguration<Exception, Exception>... configurations) {
+    public static <T> Supplier<T> fromUnchecked(Supplier<T> supplier,
+                                                WrappingConfiguration<? extends Exception, ? extends Exception>... configurations) {
         return CheckedToRuntimeWrapper.from(fromChecked(supplier::get, configurations));
     }
 
     @SafeVarargs
-    public static CheckedRunnable fromChecked(CheckedRunnable runnable, WrappingConfiguration<Exception, Exception>... configurations) {
+    public static CheckedRunnable fromChecked(CheckedRunnable runnable,
+                                              WrappingConfiguration<? extends Exception, ? extends Exception>... configurations) {
         return fromChecked(() -> {
             runnable.run();
             return null;
@@ -25,41 +28,50 @@ public class ExceptionWrapper {
     }
 
     @SafeVarargs
-    public static Runnable fromUnchecked(Runnable runnable, WrappingConfiguration<Exception, Exception>... configurations) {
+    public static Runnable fromUnchecked(Runnable runnable,
+                                         WrappingConfiguration<? extends Exception, ? extends Exception>... configurations) {
         return CheckedToRuntimeWrapper.from(fromChecked(runnable::run, configurations));
     }
 
     @SafeVarargs
-    public static <T> T wrapChecked(Callable<T> callable, WrappingConfiguration<Exception, Exception>... configurations) throws Exception {
+    public static <T> T wrapChecked(Callable<T> callable,
+                                    WrappingConfiguration<? extends Exception, ? extends Exception>... configurations) throws Exception {
         return fromChecked(callable, configurations).call();
     }
 
     @SafeVarargs
-    public static <T> T wrapUnchecked(Supplier<T> supplier, WrappingConfiguration<Exception, Exception>... configurations) {
+    public static <T> T wrapUnchecked(Supplier<T> supplier,
+                                      WrappingConfiguration<? extends Exception, ? extends Exception>... configurations) {
         return fromUnchecked(supplier, configurations).get();
     }
 
     @SafeVarargs
-    public static void wrapChecked(CheckedRunnable runnable, WrappingConfiguration<Exception, Exception>... configurations) throws Exception {
+    public static void wrapChecked(CheckedRunnable runnable,
+                                   WrappingConfiguration<? extends Exception, ? extends Exception>... configurations) throws Exception {
         fromChecked(runnable, configurations).run();
     }
 
     @SafeVarargs
-    public static void wrapUnchecked(Runnable runnable, WrappingConfiguration<Exception, Exception>... configurations) {
+    public static void wrapUnchecked(Runnable runnable,
+                                     WrappingConfiguration<? extends Exception, ? extends Exception>... configurations) {
         fromUnchecked(runnable, configurations).run();
     }
 
     private static class CheckedExceptionWrapper<T> implements Callable<T> {
-        private WrappingConfiguration<Exception, Exception>[] configuration;
+        private WrappingConfiguration<? extends Exception, ? extends Exception>[] configurations;
         private Callable<T> callable;
 
-        public CheckedExceptionWrapper(Callable<T> callable, WrappingConfiguration<Exception, Exception>... configuration) {
-            this.callable = callable;
-            if (!isDistinct(configuration)) {
-                throw new IllegalArgumentException("Configuration has repeating elements");
-            } else {
-                this.configuration = configuration;
+        @SafeVarargs
+        public CheckedExceptionWrapper(Callable<T> callable,
+                                       WrappingConfiguration<? extends Exception, ? extends Exception>... configurations) {
+            if (configurations.length == 0) {
+                throw new IllegalArgumentException("No configuration provided");
             }
+            if (!isDistinct(configurations)) {
+                throw new IllegalArgumentException("Configuration has repeating elements");
+            }
+            this.callable = callable;
+            this.configurations = configurations;
         }
 
         @Override
@@ -67,11 +79,12 @@ public class ExceptionWrapper {
             try {
                 return callable.call();
             } catch (Exception e) {
-                Optional<WrappingConfiguration<Exception, Exception>> wrappingConfigurationOptional = Arrays.stream(configuration)
-                        .filter(wrappingConfiguration -> wrappingConfiguration.canWrap(e))
-                        .findFirst();
+                Optional<WrappingConfiguration<? extends Exception, ? extends Exception>> wrappingConfigurationOptional =
+                        Arrays.stream(configurations)
+                            .filter(wrappingConfiguration -> wrappingConfiguration.canWrap(e))
+                            .findFirst();
                 if (wrappingConfigurationOptional.isPresent()) {
-                    WrappingConfiguration<Exception, Exception> wrappingConfiguration = wrappingConfigurationOptional.get();
+                    WrappingConfiguration<? extends Exception, ? extends Exception> wrappingConfiguration = wrappingConfigurationOptional.get();
                     throw wrappingConfiguration.wrap(e);
                 } else {
                     throw e;
