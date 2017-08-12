@@ -84,8 +84,7 @@ public class ExceptionWrapper {
                             .filter(wrappingConfiguration -> wrappingConfiguration.canWrap(e))
                             .findFirst();
                 if (wrappingConfigurationOptional.isPresent()) {
-                    WrappingConfiguration<? extends Exception, ? extends Exception> wrappingConfiguration = wrappingConfigurationOptional.get();
-                    throw wrappingConfiguration.wrap(e);
+                    throw wrappingConfigurationOptional.get().wrap(e);
                 } else {
                     throw e;
                 }
