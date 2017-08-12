@@ -6,7 +6,7 @@ public class WrappingConfiguration<TSource extends Exception, TDestination exten
     private Class<TSource> exceptionToWrap;
     private Function<TSource, TDestination> wrapper;
 
-    private WrappingConfiguration(Class<TSource> exceptionToWrap, Function<TSource, TDestination> wrapper) {
+    public WrappingConfiguration(Class<TSource> exceptionToWrap, Function<TSource, TDestination> wrapper) {
         this.exceptionToWrap = exceptionToWrap;
         this.wrapper = wrapper;
     }
