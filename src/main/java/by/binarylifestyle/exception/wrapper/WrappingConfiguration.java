@@ -2,7 +2,7 @@ package by.binarylifestyle.exception.wrapper;
 
 import java.util.function.Function;
 
-public class WrappingConfiguration<TSource extends Exception, TDestination> {
+public class WrappingConfiguration<TSource extends Exception, TDestination extends Exception> {
     private Class<TSource> exceptionToWrap;
     private Function<TSource, TDestination> wrapper;
 
@@ -13,18 +13,18 @@ public class WrappingConfiguration<TSource extends Exception, TDestination> {
 
     @SuppressWarnings("unchecked")
     public TDestination wrap(Exception exception) {
-        if (exceptionToWrap.isInstance(exception)) {
+        if (canWrap(exception)) {
             return wrapper.apply((TSource)exception);
         } else {
             throw new IllegalArgumentException(String.format("Provided exception can not be cast to %s", exceptionToWrap));
         }
     }
 
-    public boolean canWrap(Exception e) {
-        return exceptionToWrap.isInstance(e);
+    public boolean canWrap(Exception exception) {
+        return exceptionToWrap.isInstance(exception);
     }
 
-    public Class<TSource> getExceptionToWrap() {
+    Class<TSource> getExceptionToWrap() {
         return exceptionToWrap;
     }
 }

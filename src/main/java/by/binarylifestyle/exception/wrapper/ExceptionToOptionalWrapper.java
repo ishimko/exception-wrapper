@@ -7,20 +7,30 @@ import java.util.function.Supplier;
 
 public class ExceptionToOptionalWrapper {
     @SafeVarargs
-    public static <T> Supplier<Optional<T>> fromSupplier(Supplier<T> supplier, Class<? extends Exception>... exceptionsToWrap) {
-        return new ExceptionWrapperFromSupplier<>(supplier, exceptionsToWrap);
+    public static <T> Supplier<Optional<T>> unchecked(Supplier<T> supplier, Class<? extends Exception>... exceptionsToWrap) {
+        return CheckedToRuntimeWrapper.from(checked(supplier::get, exceptionsToWrap));
     }
 
     @SafeVarargs
-    public static <T> Callable<Optional<T>> fromCallable(Callable<T> callable, Class<? extends Exception>... exceptionsToWrap) {
-        return new ExceptionWrapperFromCallable<>(callable, exceptionsToWrap);
+    public static <T> Callable<Optional<T>> checked(Callable<T> callable, Class<? extends Exception>... exceptionsToWrap) {
+        return new ExceptionToOptionalWrapperCallable<>(callable, exceptionsToWrap);
     }
 
-    private static class ExceptionWrapperFromCallable<T> implements Callable<Optional<T>> {
+    @SafeVarargs
+    public static <T> Optional<T> wrapUnchecked(Supplier<T> supplier, Class<? extends Exception>... exceptionsToWrap) {
+        return unchecked(supplier, exceptionsToWrap).get();
+    }
+
+    @SafeVarargs
+    public static <T> Optional<T> wrapChecked(Callable<T> callable, Class<? extends Exception>... exceptionsToWrap) throws Exception {
+        return checked(callable, exceptionsToWrap).call();
+    }
+
+    private static class ExceptionToOptionalWrapperCallable<T> implements Callable<Optional<T>> {
         private final Callable<T> callable;
         private final Class<? extends Exception>[] exceptionsToWrap;
 
-        ExceptionWrapperFromCallable(Callable<T> callable, Class<? extends Exception>... exceptionsToWrap) {
+        ExceptionToOptionalWrapperCallable(Callable<T> callable, Class<? extends Exception>... exceptionsToWrap) {
             this.callable = callable;
             this.exceptionsToWrap = exceptionsToWrap;
         }
@@ -41,28 +51,4 @@ public class ExceptionToOptionalWrapper {
         }
     }
 
-    private static class ExceptionWrapperFromSupplier<T> implements Supplier<Optional<T>> {
-        private final Callable<Optional<T>> optionalCallable;
-
-        ExceptionWrapperFromSupplier(Supplier<T> supplier, Class<? extends Exception>... exceptionsToWrap) {
-            optionalCallable = ExceptionToOptionalWrapper.fromCallable(
-                    supplier::get,
-                    exceptionsToWrap
-            );
-        }
-
-        @Override
-        public Optional<T> get() {
-            try {
-                return optionalCallable.call();
-            } catch (Exception e) {
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
-                } else {
-                    // Should never happen, because callable is made from supplier, that can not throw checked exceptions
-                    throw new IllegalStateException("Internal error: Unexpected checked exception", e);
-                }
-            }
-        }
-    }
 }
