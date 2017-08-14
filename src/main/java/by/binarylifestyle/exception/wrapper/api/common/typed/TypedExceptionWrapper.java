@@ -4,9 +4,9 @@ import by.binarylifestyle.exception.wrapper.impl.common.CheckedToRuntimeWrapper;
 
 import java.util.function.Supplier;
 
-public interface TypedExceptionWrapper<S, D> extends TypedCheckedExceptionWrapper<S, D>, TypedUncheckedExceptionTypedWrapper<S, D> {
+public interface TypedExceptionWrapper<T, R> extends TypedCheckedExceptionWrapper<T, R>, TypedUncheckedExceptionTypedWrapper<T, R> {
     @Override
-    default Supplier<D> applyTo(Supplier<S> supplier) {
+    default Supplier<R> applyTo(Supplier<T> supplier) {
         return CheckedToRuntimeWrapper.applyTo(applyToChecked(supplier::get));
     }
 }

@@ -2,10 +2,10 @@ package by.binarylifestyle.exception.wrapper.api.common.typed;
 
 import java.util.concurrent.Callable;
 
-public interface TypedCheckedExceptionWrapper<S, D> {
-    Callable<D> applyToChecked(Callable<S> callable);
+public interface TypedCheckedExceptionWrapper<T, R> {
+    Callable<R> applyToChecked(Callable<T> callable);
 
-    default D wrap(Callable<S> callable) throws Exception {
+    default R wrap(Callable<T> callable) throws Exception {
         return applyToChecked(callable).call();
     }
 }
