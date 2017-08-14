@@ -1,13 +1,13 @@
 package by.binarylifestyle.exception.wrapper.impl.common;
 
-import by.binarylifestyle.exception.wrapper.api.common.typed.TypedUncheckedExceptionTypedWrapper;
+import by.binarylifestyle.exception.wrapper.api.common.UncheckedExceptionWrapper;
 import by.binarylifestyle.exception.wrapper.impl.support.WrappingConfiguration;
 
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class MappingExceptionWrapper<T> implements TypedUncheckedExceptionTypedWrapper<T, T> {
+public class MappingExceptionWrapper<T> implements UncheckedExceptionWrapper<T, T> {
     private WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>[] configurations;
 
     @SafeVarargs
