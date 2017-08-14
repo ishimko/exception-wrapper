@@ -1,4 +1,4 @@
-package by.binarylifestyle.exception.wrapper;
+package by.binarylifestyle.exception.wrapper.impl.support;
 
 import java.util.function.Function;
 
@@ -24,7 +24,7 @@ public class WrappingConfiguration<TSource extends Exception, TDestination exten
         return exceptionToWrap.isInstance(exception);
     }
 
-    Class<TSource> getExceptionToWrap() {
+    public Class<TSource> getExceptionToWrap() {
         return exceptionToWrap;
     }
 }
