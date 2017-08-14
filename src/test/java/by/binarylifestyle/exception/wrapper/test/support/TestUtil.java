@@ -11,4 +11,12 @@ public final class TestUtil {
             Assert.assertEquals(exceptionClass, e.getClass());
         }
     }
+
+    public static void expectCause(Runnable runnable, Class<? extends Exception> expectedException) {
+        try {
+            runnable.run();
+        } catch (RuntimeException e) {
+            Assert.assertEquals(expectedException, e.getCause().getClass());
+        }
+    }
 }
