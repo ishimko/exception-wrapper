@@ -3,7 +3,9 @@ package by.binarylifestyle.exception.wrapper.test;
 import by.binarylifestyle.exception.wrapper.impl.common.MappingExceptionWrapper;
 import by.binarylifestyle.exception.wrapper.impl.support.WrappingConfiguration;
 import by.binarylifestyle.exception.wrapper.test.exception.dao.UncheckedDaoException;
+import by.binarylifestyle.exception.wrapper.test.exception.dao.UncheckedSpecificDaoException;
 import by.binarylifestyle.exception.wrapper.test.exception.serivce.UncheckedServiceException;
+import by.binarylifestyle.exception.wrapper.test.exception.serivce.UncheckedSpecificServiceException;
 import by.binarylifestyle.exception.wrapper.test.exception.thirdparty.UncheckedThirdPartyException;
 import by.binarylifestyle.exception.wrapper.test.runnable.FailingRunnable;
 import by.binarylifestyle.exception.wrapper.test.supplier.FailingSupplier;
@@ -14,7 +16,28 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import static by.binarylifestyle.exception.wrapper.test.support.TestUtil.expectException;
+
 public class MappingExceptionWrapperTests {
+    private static final WrappingConfiguration<UncheckedDaoException, UncheckedServiceException>
+            PARENT_EXCEPTIONS_WRAPPING_CONFIGURATION =
+                new WrappingConfiguration<>(UncheckedDaoException.class, UncheckedServiceException::new);
+    private static final WrappingConfiguration<UncheckedSpecificDaoException, UncheckedSpecificServiceException>
+            CHILD_EXCEPTIONS_WRAPPING_CONFIGURATION =
+                new WrappingConfiguration<>(UncheckedSpecificDaoException.class, UncheckedSpecificServiceException::new);
+
+    private static final MappingExceptionWrapper<Object> INVERTED_HIERARCHY_CONFIGURATION_WRAPPER =
+            new MappingExceptionWrapper<>(
+                    PARENT_EXCEPTIONS_WRAPPING_CONFIGURATION,
+                    CHILD_EXCEPTIONS_WRAPPING_CONFIGURATION
+            );
+    private static final MappingExceptionWrapper<Object> DIRECT_HIERARCHY_CONFIGURATION_WRAPPER =
+            new MappingExceptionWrapper<>(
+                    CHILD_EXCEPTIONS_WRAPPING_CONFIGURATION,
+                    PARENT_EXCEPTIONS_WRAPPING_CONFIGURATION
+            );
+
+
     @Test(expected = UncheckedServiceException.class)
     public void typedWrappingExceptionToWrapThrownTest() {
         Wrappers.daoToServiceExceptionWrapper().wrap(new FailingSupplier<>(UncheckedDaoException::new));
@@ -23,6 +46,58 @@ public class MappingExceptionWrapperTests {
     @Test(expected = UncheckedServiceException.class)
     public void typedApplyingExceptionToWrapThrownTest() {
         Wrappers.daoToServiceExceptionWrapper().applyTo(new FailingSupplier<>(UncheckedDaoException::new)).get();
+    }
+
+    @Test
+    public void typedWrappingInheritanceTest() {
+        FailingSupplier<Object> failingSupplier = new FailingSupplier<>(UncheckedSpecificDaoException::new);
+        expectException(
+                () -> DIRECT_HIERARCHY_CONFIGURATION_WRAPPER.wrap(failingSupplier),
+                UncheckedSpecificServiceException.class
+        );
+        expectException(
+                () -> INVERTED_HIERARCHY_CONFIGURATION_WRAPPER.wrap(failingSupplier),
+                UncheckedSpecificServiceException.class
+        );
+    }
+
+    @Test
+    public void typedApplyingInheritanceTest() {
+        FailingSupplier<Object> failingSupplier = new FailingSupplier<>(UncheckedSpecificDaoException::new);
+        expectException(
+                DIRECT_HIERARCHY_CONFIGURATION_WRAPPER.applyTo(failingSupplier)::get,
+                UncheckedSpecificServiceException.class
+        );
+        expectException(
+                INVERTED_HIERARCHY_CONFIGURATION_WRAPPER.applyTo(failingSupplier)::get,
+                UncheckedSpecificServiceException.class
+        );
+    }
+
+    @Test
+    public void voidWrappingInheritanceTest() {
+        FailingRunnable failingRunnable = new FailingRunnable(UncheckedSpecificDaoException::new);
+        expectException(
+                () -> DIRECT_HIERARCHY_CONFIGURATION_WRAPPER.wrap(failingRunnable),
+                UncheckedSpecificServiceException.class
+        );
+        expectException(
+                () -> INVERTED_HIERARCHY_CONFIGURATION_WRAPPER.wrap(failingRunnable),
+                UncheckedSpecificServiceException.class
+        );
+    }
+
+    @Test
+    public void voidApplyingInheritanceTest() {
+        FailingRunnable failingRunnable = new FailingRunnable(UncheckedSpecificDaoException::new);
+        expectException(
+                DIRECT_HIERARCHY_CONFIGURATION_WRAPPER.applyTo(failingRunnable),
+                UncheckedSpecificServiceException.class
+        );
+        expectException(
+                INVERTED_HIERARCHY_CONFIGURATION_WRAPPER.applyTo(failingRunnable),
+                UncheckedSpecificServiceException.class
+        );
     }
 
     @Test
@@ -102,6 +177,7 @@ public class MappingExceptionWrapperTests {
     public void configurationWithRepeatedExceptionsTest() {
         new MappingExceptionWrapper<>(
                 new WrappingConfiguration<>(UncheckedDaoException.class, UncheckedServiceException::new),
-                new WrappingConfiguration<>(UncheckedDaoException.class, UncheckedServiceException::new));
+                new WrappingConfiguration<>(UncheckedDaoException.class, UncheckedServiceException::new)
+        );
     }
 }
