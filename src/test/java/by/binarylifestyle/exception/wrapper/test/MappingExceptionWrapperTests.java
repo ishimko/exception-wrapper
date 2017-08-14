@@ -1,4 +1,4 @@
-package by.binarylifestyle.exception.wrapper;
+package by.binarylifestyle.exception.wrapper.test;
 
 import by.binarylifestyle.exception.wrapper.impl.common.MappingExceptionWrapper;
 import by.binarylifestyle.exception.wrapper.impl.support.WrappingConfiguration;
@@ -7,17 +7,14 @@ import by.binarylifestyle.exception.wrapper.test.exception.serivce.UncheckedServ
 import by.binarylifestyle.exception.wrapper.test.exception.thirdparty.UncheckedThirdPartyException;
 import by.binarylifestyle.exception.wrapper.test.runnable.FailingRunnable;
 import by.binarylifestyle.exception.wrapper.test.supplier.FailingSupplier;
+import by.binarylifestyle.exception.wrapper.test.support.TestData;
 import by.binarylifestyle.exception.wrapper.test.support.Wrappers;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.function.Supplier;
 
 public class MappingExceptionWrapperTests {
-    private static final int EXPECTED = 42;
-    private static final Supplier<Integer> TEST_SUPPLIER = () -> EXPECTED;
-
     @Test(expected = UncheckedServiceException.class)
     public void typedWrappingExceptionToWrapThrownTest() {
         Wrappers.daoToServiceExceptionWrapper().wrap(new FailingSupplier<>(UncheckedDaoException::new));
@@ -30,14 +27,14 @@ public class MappingExceptionWrapperTests {
 
     @Test
     public void typedWrappingNoExceptionTest() {
-        int actual = Wrappers.<Integer>daoToServiceExceptionWrapper().wrap(TEST_SUPPLIER);
-        Assert.assertEquals(EXPECTED, actual);
+        int actual = Wrappers.<Integer>daoToServiceExceptionWrapper().wrap(TestData.supplier());
+        Assert.assertEquals(TestData.expectedForAllGetters(), actual);
     }
 
     @Test
     public void typedApplyingNoExceptionTest() {
-        int actual = Wrappers.<Integer>daoToServiceExceptionWrapper().applyTo(TEST_SUPPLIER).get();
-        Assert.assertEquals(EXPECTED, actual);
+        int actual = Wrappers.<Integer>daoToServiceExceptionWrapper().applyTo(TestData.supplier()).get();
+        Assert.assertEquals(TestData.expectedForAllGetters(), actual);
     }
 
     @Test(expected = UncheckedThirdPartyException.class)
@@ -69,7 +66,7 @@ public class MappingExceptionWrapperTests {
     }
 
     @Test
-    public void voidUncheckedApplyingNoExceptionTest() {
+    public void voidApplyingNoExceptionTest() {
         ArrayList<Object> list = new ArrayList<>();
         Runnable runnable = () -> list.add(new Object());
         Wrappers.daoToServiceExceptionWrapper().applyTo(runnable).run();
@@ -77,12 +74,12 @@ public class MappingExceptionWrapperTests {
     }
 
     @Test(expected = UncheckedThirdPartyException.class)
-    public void voidUncheckedWrappingAnotherExceptionTest() {
+    public void voidWrappingAnotherExceptionTest() {
         Wrappers.daoToServiceExceptionWrapper().wrap(new FailingRunnable(UncheckedThirdPartyException::new));
     }
 
     @Test(expected = UncheckedThirdPartyException.class)
-    public void voidUncheckedApplyingAnotherExceptionTest() {
+    public void voidApplyingAnotherExceptionTest() {
         Wrappers.daoToServiceExceptionWrapper().applyTo(new FailingRunnable(UncheckedThirdPartyException::new)).run();
     }
 
@@ -93,7 +90,7 @@ public class MappingExceptionWrapperTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void nullConfigurationsTest() {
-        new MappingExceptionWrapper<>(null);
+        new MappingExceptionWrapper<>((WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>[]) null);
     }
 
     @Test(expected = IllegalArgumentException.class)
