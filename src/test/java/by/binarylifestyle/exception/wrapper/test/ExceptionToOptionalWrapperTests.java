@@ -133,6 +133,26 @@ public class ExceptionToOptionalWrapperTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void wrappingUncheckedNullTest() {
+        Wrappers.daoExceptionToOptionalWrapper().wrap(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void applyingUncheckedNullTest() {
+        Wrappers.daoExceptionToOptionalWrapper().applyTo(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrappingCheckedNullTest() throws Exception{
+        Wrappers.daoExceptionToOptionalWrapper().wrapChecked(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void applyingCheckedNullTest() {
+        Wrappers.daoExceptionToOptionalWrapper().applyToChecked(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void nullExceptionsToWrapTest() {
         new ExceptionToOptionalWrapper<>((Class<? extends Exception>[]) null);
     }

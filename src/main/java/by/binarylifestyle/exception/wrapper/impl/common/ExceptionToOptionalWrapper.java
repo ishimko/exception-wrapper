@@ -25,6 +25,7 @@ public class ExceptionToOptionalWrapper<T> implements TypedExceptionWrapper<T, O
 
     @Override
     public Callable<Optional<T>> applyToChecked(Callable<T> callable) {
+        ValidationUtil.requireNotNull(callable, "callable");
         return new ExceptionToOptionalWrappingCallable<>(callable, exceptionsToWrap);
     }
 
