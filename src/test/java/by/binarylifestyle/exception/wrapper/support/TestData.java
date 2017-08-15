@@ -3,7 +3,9 @@ package by.binarylifestyle.exception.wrapper.support;
 import by.binarylifestyle.exception.wrapper.exception.dao.CheckedDaoException;
 import by.binarylifestyle.exception.wrapper.exception.dao.UncheckedDaoException;
 
+import java.util.Arrays;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class TestData {
@@ -31,5 +33,9 @@ public final class TestData {
     @SuppressWarnings("unchecked")
     public static Class<? extends Exception>[] daoExceptions() {
         return new Class[]{CheckedDaoException.class, UncheckedDaoException.class};
+    }
+
+    public static Function<Integer[], Integer> function() {
+        return integers -> Arrays.stream(integers).mapToInt(Integer::intValue).sum();
     }
 }
