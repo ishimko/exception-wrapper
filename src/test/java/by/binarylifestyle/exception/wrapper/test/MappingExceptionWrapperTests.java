@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import static by.binarylifestyle.exception.wrapper.test.support.TestUtil.expectException;
 
+@SuppressWarnings("ThrowableNotThrown")
 public class MappingExceptionWrapperTests {
     private static final WrappingConfiguration<UncheckedDaoException, UncheckedServiceException>
             PARENT_EXCEPTIONS_WRAPPING_CONFIGURATION =
@@ -49,7 +50,7 @@ public class MappingExceptionWrapperTests {
     }
 
     @Test
-    public void typedWrappingInheritanceTest() {
+    public void typedWrappingSubclassOverrideTest() {
         FailingSupplier<Object> failingSupplier = new FailingSupplier<>(UncheckedSpecificDaoException::new);
         expectException(
                 () -> DIRECT_HIERARCHY_CONFIGURATION_WRAPPER.wrap(failingSupplier),
@@ -62,7 +63,7 @@ public class MappingExceptionWrapperTests {
     }
 
     @Test
-    public void typedApplyingInheritanceTest() {
+    public void typedApplyingSubclassOverrideTest() {
         FailingSupplier<Object> failingSupplier = new FailingSupplier<>(UncheckedSpecificDaoException::new);
         expectException(
                 DIRECT_HIERARCHY_CONFIGURATION_WRAPPER.applyTo(failingSupplier)::get,
@@ -75,7 +76,7 @@ public class MappingExceptionWrapperTests {
     }
 
     @Test
-    public void voidWrappingInheritanceTest() {
+    public void voidWrappingSubclassOverrideTest() {
         FailingRunnable failingRunnable = new FailingRunnable(UncheckedSpecificDaoException::new);
         expectException(
                 () -> DIRECT_HIERARCHY_CONFIGURATION_WRAPPER.wrap(failingRunnable),
@@ -88,7 +89,7 @@ public class MappingExceptionWrapperTests {
     }
 
     @Test
-    public void voidApplyingInheritanceTest() {
+    public void voidApplyingSubclassOverrideTest() {
         FailingRunnable failingRunnable = new FailingRunnable(UncheckedSpecificDaoException::new);
         expectException(
                 DIRECT_HIERARCHY_CONFIGURATION_WRAPPER.applyTo(failingRunnable),
@@ -161,6 +162,26 @@ public class MappingExceptionWrapperTests {
     @Test(expected = IllegalArgumentException.class)
     public void emptyConfigurationTest() {
         new MappingExceptionWrapper<>();
+    }
+
+    @Test(expected = UncheckedServiceException.class)
+    public void typedWrappingSubclassTest() {
+        Wrappers.daoToServiceExceptionWrapper().wrap(new FailingSupplier<>(UncheckedSpecificDaoException::new));
+    }
+
+    @Test(expected = UncheckedServiceException.class)
+    public void typedApplyingSubclassTest() {
+        Wrappers.daoToServiceExceptionWrapper().applyTo(new FailingSupplier<>(UncheckedSpecificDaoException::new)).get();
+    }
+
+    @Test(expected = UncheckedServiceException.class)
+    public void voidWrappingSubclassTest() {
+        Wrappers.daoToServiceExceptionWrapper().wrap(new FailingRunnable(UncheckedSpecificDaoException::new));
+    }
+
+    @Test(expected = UncheckedServiceException.class)
+    public void voidApplyingSubclassTest() {
+        Wrappers.daoToServiceExceptionWrapper().applyTo(new FailingRunnable(UncheckedSpecificDaoException::new)).run();
     }
 
     @Test(expected = IllegalArgumentException.class)
