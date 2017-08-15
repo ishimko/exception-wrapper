@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class CheckedToRuntimeWrapperTests {
+public class CheckedToRuntimeWrapperTests extends CheckedToRuntimeWrapper {
     @Test
     public void voidWrappingCheckedExceptionThrownTest() {
         TestUtil.expectCause(

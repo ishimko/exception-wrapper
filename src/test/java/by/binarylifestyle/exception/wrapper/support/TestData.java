@@ -2,6 +2,7 @@ package by.binarylifestyle.exception.wrapper.support;
 
 import by.binarylifestyle.exception.wrapper.exception.dao.CheckedDaoException;
 import by.binarylifestyle.exception.wrapper.exception.dao.UncheckedDaoException;
+import by.binarylifestyle.exception.wrapper.impl.support.ClassHierarchyComparator;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
@@ -13,6 +14,12 @@ public final class TestData {
     private static final int DEFAULT = 0;
     private static final Supplier<Integer> TEST_SUPPLIER = () -> EXPECTED;
     private static final Callable<Integer> TEST_CALLABLE = TEST_SUPPLIER::get;
+    private static final Class[] DAO_EXCEPTIONS = {CheckedDaoException.class, UncheckedDaoException.class};
+    private static final ClassHierarchyComparator CLASS_HIERARCHY_COMPARATOR = new ClassHierarchyComparator();
+    private static final Function<Integer[], Integer> SUM_FUNCTION =
+            integers -> Arrays.stream(integers)
+                    .mapToInt(Integer::intValue)
+                    .sum();
 
     public static int expectedForAllGetters() {
         return EXPECTED;
@@ -32,10 +39,14 @@ public final class TestData {
 
     @SuppressWarnings("unchecked")
     public static Class<? extends Exception>[] daoExceptions() {
-        return new Class[]{CheckedDaoException.class, UncheckedDaoException.class};
+        return DAO_EXCEPTIONS;
     }
 
     public static Function<Integer[], Integer> function() {
-        return integers -> Arrays.stream(integers).mapToInt(Integer::intValue).sum();
+        return SUM_FUNCTION;
+    }
+
+    public static ClassHierarchyComparator classHierarchyComparator() {
+        return CLASS_HIERARCHY_COMPARATOR;
     }
 }

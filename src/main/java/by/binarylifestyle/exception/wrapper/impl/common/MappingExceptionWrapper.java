@@ -1,6 +1,7 @@
 package by.binarylifestyle.exception.wrapper.impl.common;
 
 import by.binarylifestyle.exception.wrapper.api.common.UncheckedExceptionWrapper;
+import by.binarylifestyle.exception.wrapper.impl.support.ClassHierarchyComparator;
 import by.binarylifestyle.exception.wrapper.impl.support.ValidationUtil;
 import by.binarylifestyle.exception.wrapper.impl.support.WrappingConfiguration;
 
@@ -53,8 +54,8 @@ public class MappingExceptionWrapper<T> implements UncheckedExceptionWrapper<T, 
     }
 
     private static class CheckedExceptionWrappingSupplier<T> implements Supplier<T> {
-        private WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>[] configurations;
-        private Supplier<T> supplier;
+        private final WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>[] configurations;
+        private final Supplier<T> supplier;
 
         @SafeVarargs
         CheckedExceptionWrappingSupplier(Supplier<T> supplier,
@@ -82,7 +83,6 @@ public class MappingExceptionWrapper<T> implements UncheckedExceptionWrapper<T, 
     }
 
     private static class WrappingConfigurationComparator implements Comparator<WrappingConfiguration<?, ?>> {
-
         private final ClassHierarchyComparator classHierarchyComparator;
 
         WrappingConfigurationComparator() {
@@ -95,18 +95,4 @@ public class MappingExceptionWrapper<T> implements UncheckedExceptionWrapper<T, 
         }
     }
 
-    private static class ClassHierarchyComparator implements Comparator<Class<?>> {
-        @Override
-        public int compare(Class<?> c1, Class<?> c2) {
-            if (c1 == c2) {
-                return 0;
-            } else if (c1.isAssignableFrom(c2)) {
-                return 1;
-            } else if (c2.isAssignableFrom(c1)) {
-                return -1;
-            } else {
-                return 0;
-            }
-        }
-    }
 }

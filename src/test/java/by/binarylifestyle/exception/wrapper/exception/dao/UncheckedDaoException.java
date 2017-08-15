@@ -1,8 +1,6 @@
 package by.binarylifestyle.exception.wrapper.exception.dao;
 
-import by.binarylifestyle.exception.wrapper.exception.common.UncheckedException;
-
-public class UncheckedDaoException extends UncheckedException {
+public class UncheckedDaoException extends RuntimeException {
     public UncheckedDaoException() {
     }
 

@@ -1,8 +1,6 @@
 package by.binarylifestyle.exception.wrapper.exception.serivce;
 
-import by.binarylifestyle.exception.wrapper.exception.common.UncheckedException;
-
-public class UncheckedServiceException extends UncheckedException {
+public class UncheckedServiceException extends RuntimeException {
     public UncheckedServiceException() {
     }
 
