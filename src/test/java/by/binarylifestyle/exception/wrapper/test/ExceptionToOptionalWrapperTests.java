@@ -168,5 +168,4 @@ public class ExceptionToOptionalWrapperTests {
         ExceptionToOptionalWrapper<Object> exceptionWrapperExplicit = new ExceptionToOptionalWrapper<>(Exception.class);
         Assert.assertEquals(exceptionWrapperExplicit, exceptionWrapperImplicit);
     }
-
 }

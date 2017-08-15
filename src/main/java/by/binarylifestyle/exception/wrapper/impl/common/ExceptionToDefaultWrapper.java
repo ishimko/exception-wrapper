@@ -2,8 +2,10 @@ package by.binarylifestyle.exception.wrapper.impl.common;
 
 import by.binarylifestyle.exception.wrapper.api.common.typed.TypedExceptionWrapper;
 import by.binarylifestyle.exception.wrapper.api.support.VarargsFunction;
+import by.binarylifestyle.exception.wrapper.impl.support.ValidationUtil;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 
@@ -14,6 +16,8 @@ public class ExceptionToDefaultWrapper<T> implements TypedExceptionWrapper<T, T>
     @SafeVarargs
     @SuppressWarnings("unchecked")
     public ExceptionToDefaultWrapper(T defaultValue, Class<? extends Exception>... exceptionsToWrap) {
+        ValidationUtil.requireNotNull(defaultValue, "defaultValue");
+        ValidationUtil.requireAllNotNull(exceptionsToWrap, "exceptionsToWrap");
         this.defaultValue = defaultValue;
         if (exceptionsToWrap.length == 0) {
             //Default behaviour is to wrap all exceptions to default value
@@ -25,7 +29,22 @@ public class ExceptionToDefaultWrapper<T> implements TypedExceptionWrapper<T, T>
 
     @Override
     public Callable<T> applyToChecked(Callable<T> callable) {
+        ValidationUtil.requireNotNull(callable, "callable");
         return new ExceptionToDefaultWrappingCallable<>(callable, defaultValue, exceptionsToWrap);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExceptionToDefaultWrapper<?> that = (ExceptionToDefaultWrapper<?>) o;
+        return Objects.equals(defaultValue, that.defaultValue) &&
+                Arrays.equals(exceptionsToWrap, that.exceptionsToWrap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(defaultValue, exceptionsToWrap);
     }
 
     @SafeVarargs
