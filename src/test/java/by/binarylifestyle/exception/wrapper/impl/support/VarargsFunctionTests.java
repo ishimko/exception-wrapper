@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.function.Function;
 
-public class VarargsFunctionTest {
+public class VarargsFunctionTests {
     @Test
     public void applyTest() {
         Integer[] integers = {1, 2, 3};
