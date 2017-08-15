@@ -16,7 +16,7 @@ public class ExceptionToOptionalWrapper<T> implements TypedExceptionWrapper<T, O
         ValidationUtil.requireNotNull(exceptionsToWrap, "exceptionsToWrap");
         ValidationUtil.requireAllNotNull(exceptionsToWrap, "exceptionsToWrap");
         if (exceptionsToWrap.length == 0) {
-            //Default behaviour is to wrap all exceptions to default value
+            //Default behaviour is to wrap all exceptions to Optional.empty()
             this.exceptionsToWrap = new Class[]{Exception.class};
         } else {
             this.exceptionsToWrap = exceptionsToWrap;
