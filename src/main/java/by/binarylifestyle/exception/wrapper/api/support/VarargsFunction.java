@@ -14,4 +14,8 @@ public class VarargsFunction<T, R> implements Function<T[], R> {
     public final R apply(T... ts) {
         return function.apply(ts);
     }
+
+    public Function<T[], R> asFunction() {
+        return this;
+    }
 }

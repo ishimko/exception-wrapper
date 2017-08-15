@@ -14,9 +14,11 @@ public class VarargsFunctionTests {
         Function<Integer[], Integer> function = TestData.function();
         VarargsFunction<Integer, Integer> varargsFunction = new VarargsFunction<>(function);
 
-        Integer actual = varargsFunction.apply(1, 2, 3);
+        Integer actualAsVarargs = varargsFunction.apply(1, 2, 3);
+        Integer actualAsArray = varargsFunction.asFunction().apply(integers);
         Integer expected = function.apply(integers);
 
-        Assert.assertEquals(expected, actual);
+        Assert.assertEquals(expected, actualAsVarargs);
+        Assert.assertEquals(expected, actualAsArray);
     }
 }
