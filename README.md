@@ -1,6 +1,6 @@
 # Exception Wrapper
-[![Build Status](https://travis-ci.com/vanashimko/exception-wrapper.svg?token=DEPCzb7kbvwzsqzYek4Q&branch=master)](https://travis-ci.com/vanashimko/exception-wrapper)
-[![codecov](https://codecov.io/gh/vanashimko/exception-wrapper/branch/master/graph/badge.svg?token=HIpYm8conS)](https://codecov.io/gh/vanashimko/exception-wrapper)
+[![Build Status](https://travis-ci.org/vanashimko/exception-wrapper.svg?branch=master)](https://travis-ci.org/vanashimko/exception-wrapper)
+[![codecov](https://codecov.io/gh/vanashimko/exception-wrapper/branch/master/graph/badge.svg)](https://codecov.io/gh/vanashimko/exception-wrapper)
 
 Small library for convinient work with exceptions in Java.
 
