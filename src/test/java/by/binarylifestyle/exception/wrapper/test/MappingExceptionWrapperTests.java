@@ -15,6 +15,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.function.Supplier;
 
 import static by.binarylifestyle.exception.wrapper.test.support.TestUtil.expectException;
 
@@ -182,6 +183,26 @@ public class MappingExceptionWrapperTests {
     @Test(expected = UncheckedServiceException.class)
     public void voidApplyingSubclassTest() {
         Wrappers.daoToServiceExceptionWrapper().applyTo(new FailingRunnable(UncheckedSpecificDaoException::new)).run();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void typedApplyingNullTest() {
+        Wrappers.daoToServiceExceptionWrapper().applyTo((Supplier<Object>) null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void typedWrappingNullTest() {
+        Wrappers.daoToServiceExceptionWrapper().wrap((Supplier<Object>) null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void voidWrappingNullTest() {
+        Wrappers.daoToServiceExceptionWrapper().wrap((Runnable) null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void voidApplyingNullTest() {
+        Wrappers.daoToServiceExceptionWrapper().applyTo((Runnable) null);
     }
 
     @Test(expected = IllegalArgumentException.class)

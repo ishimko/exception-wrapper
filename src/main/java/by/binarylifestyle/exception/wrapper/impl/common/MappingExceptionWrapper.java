@@ -28,6 +28,7 @@ public class MappingExceptionWrapper<T> implements UncheckedExceptionWrapper<T, 
 
     @Override
     public Supplier<T> applyTo(Supplier<T> supplier) {
+        ValidationUtil.requireNotNull(supplier, "supplier");
         return new CheckedExceptionWrappingSupplier<>(supplier, configurations);
     }
 
