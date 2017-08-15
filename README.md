@@ -1,4 +1,5 @@
 # Exception Wrapper
+[![Build Status](https://travis-ci.com/vanashimko/exception-wrapper.svg?token=DEPCzb7kbvwzsqzYek4Q&branch=master)](https://travis-ci.com/vanashimko/exception-wrapper)
 
 Small library for convinient work with exceptions in Java.
 
