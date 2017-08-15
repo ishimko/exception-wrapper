@@ -7,7 +7,7 @@ import by.binarylifestyle.exception.wrapper.support.TestData;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ClassHierarchyComparatorTest {
+public class ClassHierarchyComparatorTests {
     @Test
     public void compareEqualTypesTest() {
         ClassHierarchyComparator comparator = TestData.classHierarchyComparator();
