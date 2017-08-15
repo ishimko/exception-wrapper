@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class CheckedToRuntimeWrapperTests {
     @Test
@@ -93,6 +94,26 @@ public class CheckedToRuntimeWrapperTests {
         CheckedRunnable checkedRunnable = () -> list.add(new Object());
         CheckedToRuntimeWrapper.applyTo(checkedRunnable).run();
         Assert.assertFalse(list.isEmpty());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void typedWrappingNullTest() {
+        CheckedToRuntimeWrapper.wrap((Callable<Object>) null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void typedApplyingNullTest() {
+        CheckedToRuntimeWrapper.applyTo((Callable<Object>) null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void voidWrappingNullTest() {
+        CheckedToRuntimeWrapper.wrap((CheckedRunnable) null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void voidApplyingNullTest() {
+        CheckedToRuntimeWrapper.applyTo((CheckedRunnable) null);
     }
 
 }

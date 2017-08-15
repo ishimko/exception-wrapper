@@ -1,6 +1,7 @@
 package by.binarylifestyle.exception.wrapper.impl.common;
 
 import by.binarylifestyle.exception.wrapper.api.support.CheckedRunnable;
+import by.binarylifestyle.exception.wrapper.impl.support.ValidationUtil;
 
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
@@ -11,6 +12,7 @@ public class CheckedToRuntimeWrapper {
     }
 
     public static Runnable applyTo(CheckedRunnable runnable) {
+        ValidationUtil.requireNotNull(runnable, "runnable");
         return applyTo(() -> {
             runnable.run();
             return null;
@@ -22,6 +24,7 @@ public class CheckedToRuntimeWrapper {
     }
 
     public static <T> Supplier<T> applyTo(Callable<T> callable) {
+        ValidationUtil.requireNotNull(callable, "callable");
         return new CheckedToRuntimeWrapperSupplier<>(callable);
     }
 
