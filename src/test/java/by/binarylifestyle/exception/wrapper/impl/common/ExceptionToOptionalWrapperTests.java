@@ -1,6 +1,5 @@
 package by.binarylifestyle.exception.wrapper.impl.common;
 
-import by.binarylifestyle.exception.wrapper.impl.common.ExceptionToOptionalWrapper;
 import by.binarylifestyle.exception.wrapper.callable.FailingCallable;
 import by.binarylifestyle.exception.wrapper.exception.dao.CheckedDaoException;
 import by.binarylifestyle.exception.wrapper.exception.dao.CheckedSpecificDaoException;
@@ -11,6 +10,7 @@ import by.binarylifestyle.exception.wrapper.exception.thirdparty.UncheckedThirdP
 import by.binarylifestyle.exception.wrapper.supplier.FailingSupplier;
 import by.binarylifestyle.exception.wrapper.support.TestData;
 import by.binarylifestyle.exception.wrapper.support.Wrappers;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -167,5 +167,10 @@ public class ExceptionToOptionalWrapperTests {
         ExceptionToOptionalWrapper<Object> exceptionWrapperImplicit = new ExceptionToOptionalWrapper<>();
         ExceptionToOptionalWrapper<Object> exceptionWrapperExplicit = new ExceptionToOptionalWrapper<>(Exception.class);
         Assert.assertEquals(exceptionWrapperExplicit, exceptionWrapperImplicit);
+    }
+
+    @Test
+    public void equalsTest() {
+        EqualsVerifier.forClass(ExceptionToOptionalWrapper.class).usingGetClass().verify();
     }
 }

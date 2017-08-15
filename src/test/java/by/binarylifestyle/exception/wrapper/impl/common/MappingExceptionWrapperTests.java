@@ -1,16 +1,16 @@
 package by.binarylifestyle.exception.wrapper.impl.common;
 
-import by.binarylifestyle.exception.wrapper.impl.common.MappingExceptionWrapper;
-import by.binarylifestyle.exception.wrapper.impl.support.WrappingConfiguration;
 import by.binarylifestyle.exception.wrapper.exception.dao.UncheckedDaoException;
 import by.binarylifestyle.exception.wrapper.exception.dao.UncheckedSpecificDaoException;
 import by.binarylifestyle.exception.wrapper.exception.serivce.UncheckedServiceException;
 import by.binarylifestyle.exception.wrapper.exception.serivce.UncheckedSpecificServiceException;
 import by.binarylifestyle.exception.wrapper.exception.thirdparty.UncheckedThirdPartyException;
+import by.binarylifestyle.exception.wrapper.impl.support.WrappingConfiguration;
 import by.binarylifestyle.exception.wrapper.runnable.FailingRunnable;
 import by.binarylifestyle.exception.wrapper.supplier.FailingSupplier;
 import by.binarylifestyle.exception.wrapper.support.TestData;
 import by.binarylifestyle.exception.wrapper.support.Wrappers;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -221,5 +221,10 @@ public class MappingExceptionWrapperTests {
                 new WrappingConfiguration<>(UncheckedDaoException.class, UncheckedServiceException::new),
                 new WrappingConfiguration<>(UncheckedDaoException.class, UncheckedServiceException::new)
         );
+    }
+
+    @Test
+    public void equalsTest() {
+        EqualsVerifier.forClass(MappingExceptionWrapper.class).usingGetClass().verify();
     }
 }

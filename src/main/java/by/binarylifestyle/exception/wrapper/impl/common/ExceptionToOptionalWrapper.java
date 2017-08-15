@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 
 public class ExceptionToOptionalWrapper<T> implements TypedExceptionWrapper<T, Optional<T>> {
-    private Class<? extends Exception>[] exceptionsToWrap;
+    private final Class<? extends Exception>[] exceptionsToWrap;
 
     @SafeVarargs
     @SuppressWarnings("unchecked")

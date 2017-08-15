@@ -1,7 +1,6 @@
 package by.binarylifestyle.exception.wrapper.impl.common;
 
 import by.binarylifestyle.exception.wrapper.api.support.CheckedRunnable;
-import by.binarylifestyle.exception.wrapper.impl.common.CheckedToRuntimeWrapper;
 import by.binarylifestyle.exception.wrapper.callable.FailingCallable;
 import by.binarylifestyle.exception.wrapper.exception.serivce.CheckedServiceException;
 import by.binarylifestyle.exception.wrapper.exception.serivce.UncheckedServiceException;

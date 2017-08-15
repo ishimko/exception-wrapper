@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class MappingExceptionWrapper<T> implements UncheckedExceptionWrapper<T, T> {
-    private WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>[] configurations;
+    private final WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>[] configurations;
 
     @SafeVarargs
     public MappingExceptionWrapper(WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>... configurations) {
@@ -28,6 +28,19 @@ public class MappingExceptionWrapper<T> implements UncheckedExceptionWrapper<T, 
     public Supplier<T> applyTo(Supplier<T> supplier) {
         ValidationUtil.requireNotNull(supplier, "supplier");
         return new CheckedExceptionWrappingSupplier<>(supplier, configurations);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MappingExceptionWrapper<?> that = (MappingExceptionWrapper<?>) o;
+        return Arrays.equals(configurations, that.configurations);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(configurations);
     }
 
     private static boolean isDistinct(WrappingConfiguration[] configuration) {

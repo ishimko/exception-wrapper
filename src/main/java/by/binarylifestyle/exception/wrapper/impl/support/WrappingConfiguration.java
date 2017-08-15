@@ -1,10 +1,11 @@
 package by.binarylifestyle.exception.wrapper.impl.support;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 public class WrappingConfiguration<S extends Exception, D extends Exception> {
-    private Class<S> exceptionToWrap;
-    private Function<S, D> wrapper;
+    private final Class<S> exceptionToWrap;
+    private final Function<S, D> wrapper;
 
     public WrappingConfiguration(Class<S> exceptionToWrap, Function<S, D> wrapper) {
         this.exceptionToWrap = exceptionToWrap;
@@ -26,5 +27,19 @@ public class WrappingConfiguration<S extends Exception, D extends Exception> {
 
     public Class<S> getExceptionToWrap() {
         return exceptionToWrap;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WrappingConfiguration<?, ?> that = (WrappingConfiguration<?, ?>) o;
+        return Objects.equals(exceptionToWrap, that.exceptionToWrap) &&
+                Objects.equals(wrapper, that.wrapper);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(exceptionToWrap, wrapper);
     }
 }

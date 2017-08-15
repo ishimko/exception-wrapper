@@ -11,6 +11,7 @@ import by.binarylifestyle.exception.wrapper.exception.thirdparty.UncheckedThirdP
 import by.binarylifestyle.exception.wrapper.supplier.FailingSupplier;
 import by.binarylifestyle.exception.wrapper.support.TestData;
 import by.binarylifestyle.exception.wrapper.support.Wrappers;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -190,5 +191,10 @@ public class ExceptionToDefaultWrapperTests {
         ExceptionToDefaultWrapper<Integer> expected =
                 new ExceptionToDefaultWrapper<>(TestData.defaultValueForWrapping(), TestData.daoExceptions());
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void equalsTest() {
+        EqualsVerifier.forClass(ExceptionToDefaultWrapper.class).usingGetClass().verify();
     }
 }

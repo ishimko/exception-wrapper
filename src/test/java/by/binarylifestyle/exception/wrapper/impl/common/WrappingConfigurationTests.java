@@ -5,6 +5,7 @@ import by.binarylifestyle.exception.wrapper.exception.dao.UncheckedDaoException;
 import by.binarylifestyle.exception.wrapper.exception.dao.UncheckedSpecificDaoException;
 import by.binarylifestyle.exception.wrapper.exception.serivce.UncheckedServiceException;
 import by.binarylifestyle.exception.wrapper.exception.thirdparty.UncheckedThirdPartyException;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -59,5 +60,10 @@ public class WrappingConfigurationTests {
                 new WrappingConfiguration<>(UncheckedDaoException.class, UncheckedServiceException::new);
         Exception exception = new UncheckedThirdPartyException();
         configuration.wrap(exception);
+    }
+
+    @Test
+    public void equalsTest() {
+        EqualsVerifier.forClass(WrappingConfiguration.class).usingGetClass().verify();
     }
 }

@@ -10,8 +10,8 @@ import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 public class ExceptionToDefaultWrapper<T> implements TypedExceptionWrapper<T, T> {
-    private T defaultValue;
-    private Class<? extends Exception>[] exceptionsToWrap;
+    private final T defaultValue;
+    private final Class<? extends Exception>[] exceptionsToWrap;
 
     @SafeVarargs
     @SuppressWarnings("unchecked")
@@ -44,7 +44,7 @@ public class ExceptionToDefaultWrapper<T> implements TypedExceptionWrapper<T, T>
 
     @Override
     public int hashCode() {
-        return Objects.hash(defaultValue, exceptionsToWrap);
+        return Objects.hash(defaultValue, Arrays.hashCode(exceptionsToWrap));
     }
 
     @SafeVarargs
