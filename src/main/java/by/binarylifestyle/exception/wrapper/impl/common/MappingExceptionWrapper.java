@@ -15,9 +15,7 @@ public class MappingExceptionWrapper<T> implements UncheckedExceptionWrapper<T, 
     @SafeVarargs
     public MappingExceptionWrapper(WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>... configurations) {
         ValidationUtil.requireNotNull(configurations, "configurations");
-        if (configurations.length == 0) {
-            throw new IllegalArgumentException("No configuration provided");
-        }
+        ValidationUtil.requireNotEmpty(configurations, "configurations");
         ValidationUtil.requireAllNotNull(configurations, "configurations");
         if (!isDistinct(configurations)) {
             throw new IllegalArgumentException("Configuration has repeating elements");

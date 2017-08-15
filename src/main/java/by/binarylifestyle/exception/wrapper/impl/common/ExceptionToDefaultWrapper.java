@@ -12,9 +12,15 @@ public class ExceptionToDefaultWrapper<T> implements TypedExceptionWrapper<T, T>
     private Class<? extends Exception>[] exceptionsToWrap;
 
     @SafeVarargs
+    @SuppressWarnings("unchecked")
     public ExceptionToDefaultWrapper(T defaultValue, Class<? extends Exception>... exceptionsToWrap) {
         this.defaultValue = defaultValue;
-        this.exceptionsToWrap = exceptionsToWrap;
+        if (exceptionsToWrap.length == 0) {
+            //Default behaviour is to wrap all exceptions to default value
+            this.exceptionsToWrap = new Class[]{Exception.class};
+        } else {
+            this.exceptionsToWrap = exceptionsToWrap;
+        }
     }
 
     @Override
@@ -37,16 +43,10 @@ public class ExceptionToDefaultWrapper<T> implements TypedExceptionWrapper<T, T>
         private T defaultValue;
 
         @SafeVarargs
-        @SuppressWarnings("unchecked")
         ExceptionToDefaultWrappingCallable(Callable<T> callable, T defaultValue, Class<? extends Exception>... exceptionsToWrap) {
             this.callable = callable;
             this.defaultValue = defaultValue;
-            if (exceptionsToWrap.length == 0) {
-                //Default behaviour is to wrap all exceptions to default value
-                this.exceptionsToWrap = new Class[]{Exception.class};
-            } else {
-                this.exceptionsToWrap = exceptionsToWrap;
-            }
+            this.exceptionsToWrap = exceptionsToWrap;
         }
 
         @Override

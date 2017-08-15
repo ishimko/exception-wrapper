@@ -1,5 +1,6 @@
 package by.binarylifestyle.exception.wrapper.test;
 
+import by.binarylifestyle.exception.wrapper.impl.common.ExceptionToOptionalWrapper;
 import by.binarylifestyle.exception.wrapper.test.callable.FailingCallable;
 import by.binarylifestyle.exception.wrapper.test.exception.dao.CheckedDaoException;
 import by.binarylifestyle.exception.wrapper.test.exception.dao.CheckedSpecificDaoException;
@@ -130,4 +131,22 @@ public class ExceptionToOptionalWrapperTests {
                 .call();
         Assert.assertFalse(result.isPresent());
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullExceptionsToWrapTest() {
+        new ExceptionToOptionalWrapper<>((Class<? extends Exception>[]) null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullExceptionInExceptionsToWrapTest() {
+        new ExceptionToOptionalWrapper<>(null, UncheckedDaoException.class);
+    }
+
+    @Test
+    public void emptyExceptionsToWrapTest() {
+        ExceptionToOptionalWrapper<Object> exceptionWrapperImplicit = new ExceptionToOptionalWrapper<>();
+        ExceptionToOptionalWrapper<Object> exceptionWrapperExplicit = new ExceptionToOptionalWrapper<>(Exception.class);
+        Assert.assertEquals(exceptionWrapperExplicit, exceptionWrapperImplicit);
+    }
+
 }

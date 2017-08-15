@@ -38,4 +38,17 @@ public class ValidationUtilTests {
         ValidationUtil.requireAllNotNull(ARRAY_WITHOUT_NULLS, PARAMETER_NAME);
     }
 
+    @Test
+    public void requireNotEmptyEmptyArrayPassedTest() {
+        Exception exception = TestUtil.expectException(
+                () -> ValidationUtil.requireNotEmpty(new Object[]{}, PARAMETER_NAME),
+                IllegalArgumentException.class
+        );
+        Assert.assertTrue(exception.getMessage().contains(PARAMETER_NAME));
+    }
+
+    @Test
+    public void requireNotEmptyNotEmptyArrayPassedTest() {
+        ValidationUtil.requireNotEmpty(new Object[]{new Object()}, PARAMETER_NAME);
+    }
 }

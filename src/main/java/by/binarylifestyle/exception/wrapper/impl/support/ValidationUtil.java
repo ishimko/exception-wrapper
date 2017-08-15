@@ -15,4 +15,10 @@ public final class ValidationUtil {
             throw new IllegalArgumentException(String.format("`%s` contains null(s)", name));
         }
     }
+
+    public static void requireNotEmpty(Object[] array, String name) {
+        if (array.length == 0) {
+            throw new IllegalArgumentException(String.format("`%s` is empty", name));
+        }
+    }
 }
