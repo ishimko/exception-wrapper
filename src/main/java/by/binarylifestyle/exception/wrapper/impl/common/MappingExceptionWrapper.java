@@ -1,11 +1,11 @@
 package by.binarylifestyle.exception.wrapper.impl.common;
 
 import by.binarylifestyle.exception.wrapper.api.common.UncheckedExceptionWrapper;
+import by.binarylifestyle.exception.wrapper.impl.support.ValidationUtil;
 import by.binarylifestyle.exception.wrapper.impl.support.WrappingConfiguration;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -14,15 +14,11 @@ public class MappingExceptionWrapper<T> implements UncheckedExceptionWrapper<T, 
 
     @SafeVarargs
     public MappingExceptionWrapper(WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>... configurations) {
-        if (configurations == null) {
-            throw new IllegalArgumentException("Configurations is null");
-        }
+        ValidationUtil.requireNotNull(configurations, "configurations");
         if (configurations.length == 0) {
             throw new IllegalArgumentException("No configuration provided");
         }
-        if (Arrays.stream(configurations).anyMatch(Objects::isNull)) {
-            throw new IllegalArgumentException("One or more configurations are null");
-        }
+        ValidationUtil.requireAllNotNull(configurations, "configurations");
         if (!isDistinct(configurations)) {
             throw new IllegalArgumentException("Configuration has repeating elements");
         }

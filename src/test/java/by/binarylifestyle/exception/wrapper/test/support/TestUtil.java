@@ -3,20 +3,24 @@ package by.binarylifestyle.exception.wrapper.test.support;
 import org.junit.Assert;
 
 public final class TestUtil {
-    public static void expectException(Runnable runnable, Class<? extends RuntimeException> exceptionClass) {
-        try {
-            runnable.run();
-            Assert.fail(String.format("Expected exception: %s", exceptionClass));
-        } catch (RuntimeException e) {
-            Assert.assertEquals(exceptionClass, e.getClass());
-        }
+    public static Exception expectException(Runnable runnable, Class<? extends Exception> exceptionClass) {
+        Exception exception = getException(runnable);
+        Assert.assertEquals(exceptionClass, exception.getClass());
+        return exception;
     }
 
-    public static void expectCause(Runnable runnable, Class<? extends Exception> expectedException) {
+    public static Exception expectCause(Runnable runnable, Class<? extends Exception> expectedException) {
+        Exception exception = getException(runnable);
+        Assert.assertEquals(expectedException, exception.getCause().getClass());
+        return exception;
+    }
+
+    private static Exception getException(Runnable runnable) {
         try {
             runnable.run();
-        } catch (RuntimeException e) {
-            Assert.assertEquals(expectedException, e.getCause().getClass());
+            throw new AssertionError("Exception expected");
+        } catch (Exception e) {
+            return e;
         }
     }
 }
