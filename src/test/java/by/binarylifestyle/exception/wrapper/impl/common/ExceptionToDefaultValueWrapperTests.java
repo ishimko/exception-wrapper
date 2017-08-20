@@ -20,14 +20,14 @@ import java.util.function.Function;
 public class ExceptionToDefaultValueWrapperTests {
     @Test
     public void uncheckedWrappingExceptionToWrapThrownTest() {
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .wrap(new FailingSupplier<>(UncheckedDaoException::new));
         Assert.assertEquals(TestData.defaultValueForWrapping(), actual);
     }
 
     @Test
     public void uncheckedApplyingExceptionToWrapThrownTest() {
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .applyTo(new FailingSupplier<>(UncheckedDaoException::new))
                 .get();
         Assert.assertEquals(TestData.defaultValueForWrapping(), actual);
@@ -35,14 +35,14 @@ public class ExceptionToDefaultValueWrapperTests {
 
     @Test
     public void uncheckedWrappingNoExceptionTest() {
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .wrap(TestData.supplier());
         Assert.assertEquals(TestData.expectedForAllGetters(), actual);
     }
 
     @Test
     public void uncheckedApplyingNoExceptionTest() {
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .applyTo(TestData.supplier())
                 .get();
         Assert.assertEquals(TestData.expectedForAllGetters(), actual);
@@ -50,27 +50,27 @@ public class ExceptionToDefaultValueWrapperTests {
 
     @Test(expected = UncheckedThirdPartyException.class)
     public void uncheckedWrappingAnotherExceptionThrownTest() {
-        Wrappers.daoExceptionToDefault()
+        Wrappers.daoExceptionToDefaultValue()
                 .wrap(new FailingSupplier<>(UncheckedThirdPartyException::new));
     }
 
     @Test(expected = UncheckedThirdPartyException.class)
     public void uncheckedApplyingAnotherExceptionThrownTest() {
-        Wrappers.daoExceptionToDefault()
+        Wrappers.daoExceptionToDefaultValue()
                 .applyTo(new FailingSupplier<>(UncheckedThirdPartyException::new))
                 .get();
     }
 
     @Test
     public void uncheckedWrappingSubclassTest() {
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .wrap(new FailingSupplier<>(UncheckedSpecificDaoException::new));
         Assert.assertEquals(TestData.defaultValueForWrapping(), actual);
     }
 
     @Test
     public void uncheckedApplyingSubclassTest() {
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .applyTo(new FailingSupplier<>(UncheckedSpecificDaoException::new))
                 .get();
         Assert.assertEquals(TestData.defaultValueForWrapping(), actual);
@@ -78,14 +78,14 @@ public class ExceptionToDefaultValueWrapperTests {
 
     @Test
     public void checkedWrappingExceptionToWrapThrownTest() throws Exception{
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .wrapChecked(new FailingCallable<>(CheckedDaoException::new));
         Assert.assertEquals(TestData.defaultValueForWrapping(), actual);
     }
 
     @Test
     public void checkedApplyingExceptionToWrapThrownTest() throws Exception {
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .applyToChecked(new FailingCallable<>(CheckedDaoException::new))
                 .call();
         Assert.assertEquals(TestData.defaultValueForWrapping(), actual);
@@ -93,14 +93,14 @@ public class ExceptionToDefaultValueWrapperTests {
 
     @Test
     public void checkedWrappingNoExceptionTest() throws Exception {
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .wrapChecked(TestData.callable());
         Assert.assertEquals(TestData.expectedForAllGetters(), actual);
     }
 
     @Test
     public void checkedApplyingNoExceptionTest() throws Exception {
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .applyToChecked(TestData.callable())
                 .call();
         Assert.assertEquals(TestData.expectedForAllGetters(), actual);
@@ -108,27 +108,27 @@ public class ExceptionToDefaultValueWrapperTests {
 
     @Test(expected = CheckedThirdPartyException.class)
     public void checkedWrappingAnotherExceptionThrownTest() throws Exception {
-        Wrappers.daoExceptionToDefault()
+        Wrappers.daoExceptionToDefaultValue()
                 .wrapChecked(new FailingCallable<>(CheckedThirdPartyException::new));
     }
 
     @Test(expected = CheckedThirdPartyException.class)
     public void checkedApplyingAnotherExceptionThrownTest() throws Exception {
-        Wrappers.daoExceptionToDefault()
+        Wrappers.daoExceptionToDefaultValue()
                 .applyToChecked(new FailingCallable<>(CheckedThirdPartyException::new))
                 .call();
     }
 
     @Test
     public void checkedWrappingSubclassTest() throws Exception {
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .wrapChecked(new FailingCallable<>(CheckedSpecificDaoException::new));
         Assert.assertEquals(TestData.defaultValueForWrapping(), actual);
     }
 
     @Test
     public void checkedApplyingSubclassTest() throws Exception {
-        int actual = Wrappers.daoExceptionToDefault()
+        int actual = Wrappers.daoExceptionToDefaultValue()
                 .applyToChecked(new FailingCallable<>(CheckedSpecificDaoException::new))
                 .call();
         Assert.assertEquals(TestData.defaultValueForWrapping(), actual);
@@ -136,22 +136,22 @@ public class ExceptionToDefaultValueWrapperTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void wrappingUncheckedNullTest() {
-        Wrappers.daoExceptionToDefault().wrap(null);
+        Wrappers.daoExceptionToDefaultValue().wrap(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void applyingUncheckedNullTest() {
-        Wrappers.daoExceptionToDefault().applyTo(null);
+        Wrappers.daoExceptionToDefaultValue().applyTo(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void wrappingCheckedNullTest() throws Exception{
-        Wrappers.daoExceptionToDefault().wrapChecked(null);
+        Wrappers.daoExceptionToDefaultValue().wrapChecked(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void applyingCheckedNullTest() {
-        Wrappers.daoExceptionToDefault().applyToChecked(null);
+        Wrappers.daoExceptionToDefaultValue().applyToChecked(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
