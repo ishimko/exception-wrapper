@@ -1,13 +1,13 @@
 package by.binarylifestyle.exception.wrapper.impl.common;
 
-import by.binarylifestyle.exception.wrapper.api.common.typed.TypedExceptionWrapper;
 import by.binarylifestyle.exception.wrapper.impl.support.ValidationUtil;
 
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
-public class ExceptionToOptionalWrapper<T> implements TypedExceptionWrapper<T, Optional<T>> {
+public class ExceptionToOptionalWrapper {
     private final Class<? extends Exception>[] exceptionsToWrap;
 
     @SafeVarargs
@@ -23,17 +23,29 @@ public class ExceptionToOptionalWrapper<T> implements TypedExceptionWrapper<T, O
         }
     }
 
-    @Override
-    public Callable<Optional<T>> applyToChecked(Callable<T> callable) {
+    public <T> Supplier<Optional<T>> applyTo(Supplier<T> supplier) {
+        ValidationUtil.requireNotNull(supplier, "supplier");
+        return CheckedToRuntimeWrapper.applyTo(applyToChecked(supplier::get));
+    }
+
+    public <T> Callable<Optional<T>> applyToChecked(Callable<T> callable) {
         ValidationUtil.requireNotNull(callable, "callable");
         return new ExceptionToOptionalWrappingCallable<>(callable, exceptionsToWrap);
+    }
+
+    public <T> Optional<T> wrapChecked(Callable<T> callable) throws Exception {
+        return applyToChecked(callable).call();
+    }
+
+    public <T> Optional<T> wrap(Supplier<T> supplier) {
+        return applyTo(supplier).get();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ExceptionToOptionalWrapper<?> that = (ExceptionToOptionalWrapper<?>) o;
+        ExceptionToOptionalWrapper that = (ExceptionToOptionalWrapper) o;
         return Arrays.equals(exceptionsToWrap, that.exceptionsToWrap);
     }
 

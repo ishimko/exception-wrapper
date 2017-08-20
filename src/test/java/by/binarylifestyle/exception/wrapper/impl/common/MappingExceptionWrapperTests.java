@@ -28,13 +28,13 @@ public class MappingExceptionWrapperTests {
             CHILD_EXCEPTIONS_WRAPPING_CONFIGURATION =
                 new WrappingConfiguration<>(UncheckedSpecificDaoException.class, UncheckedSpecificServiceException::new);
 
-    private static final MappingExceptionWrapper<Object> INVERTED_HIERARCHY_CONFIGURATION_WRAPPER =
-            new MappingExceptionWrapper<>(
+    private static final MappingExceptionWrapper INVERTED_HIERARCHY_CONFIGURATION_WRAPPER =
+            new MappingExceptionWrapper(
                     PARENT_EXCEPTIONS_WRAPPING_CONFIGURATION,
                     CHILD_EXCEPTIONS_WRAPPING_CONFIGURATION
             );
-    private static final MappingExceptionWrapper<Object> DIRECT_HIERARCHY_CONFIGURATION_WRAPPER =
-            new MappingExceptionWrapper<>(
+    private static final MappingExceptionWrapper DIRECT_HIERARCHY_CONFIGURATION_WRAPPER =
+            new MappingExceptionWrapper(
                     CHILD_EXCEPTIONS_WRAPPING_CONFIGURATION,
                     PARENT_EXCEPTIONS_WRAPPING_CONFIGURATION
             );
@@ -162,7 +162,7 @@ public class MappingExceptionWrapperTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void emptyConfigurationTest() {
-        new MappingExceptionWrapper<>();
+        new MappingExceptionWrapper();
     }
 
     @Test(expected = UncheckedServiceException.class)
@@ -207,17 +207,17 @@ public class MappingExceptionWrapperTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void nullConfigurationsTest() {
-        new MappingExceptionWrapper<>((WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>[]) null);
+        new MappingExceptionWrapper((WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>[]) null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullConfigurationTest() {
-        new MappingExceptionWrapper<>(null, null);
+        new MappingExceptionWrapper(null, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void configurationWithRepeatedExceptionsTest() {
-        new MappingExceptionWrapper<>(
+        new MappingExceptionWrapper(
                 new WrappingConfiguration<>(UncheckedDaoException.class, UncheckedServiceException::new),
                 new WrappingConfiguration<>(UncheckedDaoException.class, UncheckedServiceException::new)
         );

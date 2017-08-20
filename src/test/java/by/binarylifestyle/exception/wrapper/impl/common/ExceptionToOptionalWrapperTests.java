@@ -154,18 +154,18 @@ public class ExceptionToOptionalWrapperTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void nullExceptionsToWrapTest() {
-        new ExceptionToOptionalWrapper<>((Class<? extends Exception>[]) null);
+        new ExceptionToOptionalWrapper((Class<? extends Exception>[]) null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullExceptionInExceptionsToWrapTest() {
-        new ExceptionToOptionalWrapper<>(null, UncheckedDaoException.class);
+        new ExceptionToOptionalWrapper(null, UncheckedDaoException.class);
     }
 
     @Test
     public void emptyExceptionsToWrapTest() {
-        ExceptionToOptionalWrapper<Object> exceptionWrapperImplicit = new ExceptionToOptionalWrapper<>();
-        ExceptionToOptionalWrapper<Object> exceptionWrapperExplicit = new ExceptionToOptionalWrapper<>(Exception.class);
+        ExceptionToOptionalWrapper exceptionWrapperImplicit = new ExceptionToOptionalWrapper();
+        ExceptionToOptionalWrapper exceptionWrapperExplicit = new ExceptionToOptionalWrapper(Exception.class);
         Assert.assertEquals(exceptionWrapperExplicit, exceptionWrapperImplicit);
     }
 

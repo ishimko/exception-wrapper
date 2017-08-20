@@ -1,6 +1,5 @@
 package by.binarylifestyle.exception.wrapper.impl.common;
 
-import by.binarylifestyle.exception.wrapper.api.common.UncheckedExceptionWrapper;
 import by.binarylifestyle.exception.wrapper.impl.support.ClassHierarchyComparator;
 import by.binarylifestyle.exception.wrapper.impl.support.ValidationUtil;
 import by.binarylifestyle.exception.wrapper.impl.support.WrappingConfiguration;
@@ -10,7 +9,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class MappingExceptionWrapper<T> implements UncheckedExceptionWrapper<T, T> {
+public class MappingExceptionWrapper {
     private final WrappingConfiguration<? extends RuntimeException, ? extends RuntimeException>[] configurations;
 
     @SafeVarargs
@@ -25,17 +24,32 @@ public class MappingExceptionWrapper<T> implements UncheckedExceptionWrapper<T, 
         this.configurations = configurations;
     }
 
-    @Override
-    public Supplier<T> applyTo(Supplier<T> supplier) {
+    public <T> Supplier<T> applyTo(Supplier<T> supplier) {
         ValidationUtil.requireNotNull(supplier, "supplier");
         return new CheckedExceptionWrappingSupplier<>(supplier, configurations);
+    }
+
+    public <T> T wrap(Supplier<T> supplier) {
+        return applyTo(supplier).get();
+    }
+
+    public Runnable applyTo(Runnable runnable) {
+        ValidationUtil.requireNotNull(runnable, "runnable");
+        return applyTo(() -> {
+            runnable.run();
+            return null;
+        })::get;
+    }
+
+    public void wrap(Runnable runnable) {
+        applyTo(runnable).run();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MappingExceptionWrapper<?> that = (MappingExceptionWrapper<?>) o;
+        MappingExceptionWrapper that = (MappingExceptionWrapper) o;
         return Arrays.equals(configurations, that.configurations);
     }
 
