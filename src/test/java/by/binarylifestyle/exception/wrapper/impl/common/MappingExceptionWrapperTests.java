@@ -42,12 +42,12 @@ public class MappingExceptionWrapperTests {
 
     @Test(expected = UncheckedServiceException.class)
     public void typedWrappingExceptionToWrapThrownTest() {
-        Wrappers.daoToServiceExceptionWrapper().wrap(new FailingSupplier<>(UncheckedDaoException::new));
+        Wrappers.daoToServiceException().wrap(new FailingSupplier<>(UncheckedDaoException::new));
     }
 
     @Test(expected = UncheckedServiceException.class)
     public void typedApplyingExceptionToWrapThrownTest() {
-        Wrappers.daoToServiceExceptionWrapper().applyTo(new FailingSupplier<>(UncheckedDaoException::new)).get();
+        Wrappers.daoToServiceException().applyTo(new FailingSupplier<>(UncheckedDaoException::new)).get();
     }
 
     @Test
@@ -104,41 +104,41 @@ public class MappingExceptionWrapperTests {
 
     @Test
     public void typedWrappingNoExceptionTest() {
-        int actual = Wrappers.<Integer>daoToServiceExceptionWrapper().wrap(TestData.supplier());
+        int actual = Wrappers.<Integer>daoToServiceException().wrap(TestData.supplier());
         Assert.assertEquals(TestData.expectedForAllGetters(), actual);
     }
 
     @Test
     public void typedApplyingNoExceptionTest() {
-        int actual = Wrappers.<Integer>daoToServiceExceptionWrapper().applyTo(TestData.supplier()).get();
+        int actual = Wrappers.<Integer>daoToServiceException().applyTo(TestData.supplier()).get();
         Assert.assertEquals(TestData.expectedForAllGetters(), actual);
     }
 
     @Test(expected = UncheckedThirdPartyException.class)
     public void typedWrappingAnotherExceptionThrownTest() {
-        Wrappers.daoToServiceExceptionWrapper().wrap(new FailingSupplier<>(UncheckedThirdPartyException::new));
+        Wrappers.daoToServiceException().wrap(new FailingSupplier<>(UncheckedThirdPartyException::new));
     }
 
     @Test(expected = UncheckedThirdPartyException.class)
     public void typedApplyingAnotherExceptionThrownTest() {
-        Wrappers.daoToServiceExceptionWrapper().applyTo(new FailingSupplier<>(UncheckedThirdPartyException::new)).get();
+        Wrappers.daoToServiceException().applyTo(new FailingSupplier<>(UncheckedThirdPartyException::new)).get();
     }
 
     @Test(expected = UncheckedServiceException.class)
     public void voidWrappingExceptionToWrapThrownTest() {
-        Wrappers.daoToServiceExceptionWrapper().wrap(new FailingRunnable(UncheckedDaoException::new));
+        Wrappers.daoToServiceException().wrap(new FailingRunnable(UncheckedDaoException::new));
     }
 
     @Test(expected = UncheckedServiceException.class)
     public void voidApplyingExceptionToWrapThrownTest() {
-        Wrappers.daoToServiceExceptionWrapper().applyTo(new FailingRunnable(UncheckedDaoException::new)).run();
+        Wrappers.daoToServiceException().applyTo(new FailingRunnable(UncheckedDaoException::new)).run();
     }
 
     @Test
     public void voidWrappingNoExceptionTest() {
         ArrayList<Object> list = new ArrayList<>();
         Runnable runnable = () -> list.add(new Object());
-        Wrappers.daoToServiceExceptionWrapper().wrap(runnable);
+        Wrappers.daoToServiceException().wrap(runnable);
         Assert.assertFalse(list.isEmpty());
     }
 
@@ -146,18 +146,18 @@ public class MappingExceptionWrapperTests {
     public void voidApplyingNoExceptionTest() {
         ArrayList<Object> list = new ArrayList<>();
         Runnable runnable = () -> list.add(new Object());
-        Wrappers.daoToServiceExceptionWrapper().applyTo(runnable).run();
+        Wrappers.daoToServiceException().applyTo(runnable).run();
         Assert.assertFalse(list.isEmpty());
     }
 
     @Test(expected = UncheckedThirdPartyException.class)
     public void voidWrappingAnotherExceptionTest() {
-        Wrappers.daoToServiceExceptionWrapper().wrap(new FailingRunnable(UncheckedThirdPartyException::new));
+        Wrappers.daoToServiceException().wrap(new FailingRunnable(UncheckedThirdPartyException::new));
     }
 
     @Test(expected = UncheckedThirdPartyException.class)
     public void voidApplyingAnotherExceptionTest() {
-        Wrappers.daoToServiceExceptionWrapper().applyTo(new FailingRunnable(UncheckedThirdPartyException::new)).run();
+        Wrappers.daoToServiceException().applyTo(new FailingRunnable(UncheckedThirdPartyException::new)).run();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -167,42 +167,42 @@ public class MappingExceptionWrapperTests {
 
     @Test(expected = UncheckedServiceException.class)
     public void typedWrappingSubclassTest() {
-        Wrappers.daoToServiceExceptionWrapper().wrap(new FailingSupplier<>(UncheckedSpecificDaoException::new));
+        Wrappers.daoToServiceException().wrap(new FailingSupplier<>(UncheckedSpecificDaoException::new));
     }
 
     @Test(expected = UncheckedServiceException.class)
     public void typedApplyingSubclassTest() {
-        Wrappers.daoToServiceExceptionWrapper().applyTo(new FailingSupplier<>(UncheckedSpecificDaoException::new)).get();
+        Wrappers.daoToServiceException().applyTo(new FailingSupplier<>(UncheckedSpecificDaoException::new)).get();
     }
 
     @Test(expected = UncheckedServiceException.class)
     public void voidWrappingSubclassTest() {
-        Wrappers.daoToServiceExceptionWrapper().wrap(new FailingRunnable(UncheckedSpecificDaoException::new));
+        Wrappers.daoToServiceException().wrap(new FailingRunnable(UncheckedSpecificDaoException::new));
     }
 
     @Test(expected = UncheckedServiceException.class)
     public void voidApplyingSubclassTest() {
-        Wrappers.daoToServiceExceptionWrapper().applyTo(new FailingRunnable(UncheckedSpecificDaoException::new)).run();
+        Wrappers.daoToServiceException().applyTo(new FailingRunnable(UncheckedSpecificDaoException::new)).run();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void typedApplyingNullTest() {
-        Wrappers.daoToServiceExceptionWrapper().applyTo((Supplier<Object>) null);
+        Wrappers.daoToServiceException().applyTo((Supplier<Object>) null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void typedWrappingNullTest() {
-        Wrappers.daoToServiceExceptionWrapper().wrap((Supplier<Object>) null);
+        Wrappers.daoToServiceException().wrap((Supplier<Object>) null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void voidWrappingNullTest() {
-        Wrappers.daoToServiceExceptionWrapper().wrap((Runnable) null);
+        Wrappers.daoToServiceException().wrap((Runnable) null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void voidApplyingNullTest() {
-        Wrappers.daoToServiceExceptionWrapper().applyTo((Runnable) null);
+        Wrappers.daoToServiceException().applyTo((Runnable) null);
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -9,13 +9,13 @@ import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class ExceptionToDefaultWrapper<T> {
+public class ExceptionToDefaultValueWrapper<T> {
     private final T defaultValue;
     private final Class<? extends Exception>[] exceptionsToWrap;
 
     @SafeVarargs
     @SuppressWarnings("unchecked")
-    public ExceptionToDefaultWrapper(T defaultValue, Class<? extends Exception>... exceptionsToWrap) {
+    public ExceptionToDefaultValueWrapper(T defaultValue, Class<? extends Exception>... exceptionsToWrap) {
         ValidationUtil.requireNotNull(defaultValue, "defaultValue");
         ValidationUtil.requireAllNotNull(exceptionsToWrap, "exceptionsToWrap");
         this.defaultValue = defaultValue;
@@ -48,7 +48,7 @@ public class ExceptionToDefaultWrapper<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ExceptionToDefaultWrapper<?> that = (ExceptionToDefaultWrapper<?>) o;
+        ExceptionToDefaultValueWrapper<?> that = (ExceptionToDefaultValueWrapper<?>) o;
         return Objects.equals(defaultValue, that.defaultValue) &&
                 Arrays.equals(exceptionsToWrap, that.exceptionsToWrap);
     }
@@ -59,12 +59,12 @@ public class ExceptionToDefaultWrapper<T> {
     }
 
     @SafeVarargs
-    public static <T> Function<T, ExceptionToDefaultWrapper<T>> bindExceptions(Class<? extends Exception>... exceptionsToWrap) {
-        return defaultValue -> new ExceptionToDefaultWrapper<>(defaultValue, exceptionsToWrap);
+    public static <T> Function<T, ExceptionToDefaultValueWrapper<T>> bindExceptions(Class<? extends Exception>... exceptionsToWrap) {
+        return defaultValue -> new ExceptionToDefaultValueWrapper<>(defaultValue, exceptionsToWrap);
     }
 
-    public static <T> VarargsFunction<Class<? extends Exception>, ExceptionToDefaultWrapper<T>> bindDefaultValue(T defaultValue) {
-        return new VarargsFunction<>(classes -> new ExceptionToDefaultWrapper<>(defaultValue, classes));
+    public static <T> VarargsFunction<Class<? extends Exception>, ExceptionToDefaultValueWrapper<T>> bindDefaultValue(T defaultValue) {
+        return new VarargsFunction<>(classes -> new ExceptionToDefaultValueWrapper<>(defaultValue, classes));
     }
 
     private static class ExceptionToDefaultWrappingCallable<T> implements Callable<T> {
