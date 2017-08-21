@@ -63,8 +63,9 @@ public void someServiceMethod() {
 
 public Optional<VeryBusinessObject> getSomethingFromSomewhere() {
     // Let's create business object getter, that will wrap DAO exceptions into Optional.empty()
-    Supplier<Optional<BusinessObject>> businessObjectGetter = Wrappers.daoExceptionToOptional().applyTo(dao::getBusinessObject); 
-  	// ... and pass it into another method, that will produce VeryBusinessObject (optional, of course)
+    Supplier<Optional<BusinessObject>> businessObjectGetter = Wrappers.daoExceptionToOptional()
+                                                                      .applyTo(dao::getBusinessObject); 
+    // ... and pass it into another method, that will produce VeryBusinessObject (optional, of course)
     return anotherServiceMethod(businessObjectGetter);
 }
 
