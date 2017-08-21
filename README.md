@@ -54,17 +54,30 @@ To use wrapper in your code simply get an appropriate one from `Wrappers` (or cr
 
 ```java
 public void someServiceMethod() {
-    Wrappers.daoToServiceException().wrap(dao::dropSomeTables); // assuming daoToServiceException method defined in the previous example, UncheckedDaoException's will be wrapped into UncheckedServiceException
+    Wrappers.daoToServiceException().wrap(dao::dropSomeTables); 
+    /* 
+        Assuming daoToServiceException method defined in the previous example, 
+        UncheckedDaoException's will be wrapped into UncheckedServiceException 
+    */
 }
 
 public Optional<VeryBusinessObject> getSomethingFromSomewhere() {
-    Supplier<Optional<BusinessObject>> businessObjectGetter = Wrappers.daoExceptionToOptional().applyTo(dao::getBusinessObject); // let's create business object getter, that will wrap DAO exceptions into Optional.empty()
-  	return anotherServiceMethod(businessObjectGetter); // and pass it into another method, that will produce VeryBusinessObject (optional, of course)
+    // Let's create business object getter, that will wrap DAO exceptions into Optional.empty()
+    Supplier<Optional<BusinessObject>> businessObjectGetter = Wrappers.daoExceptionToOptional().applyTo(dao::getBusinessObject); 
+  	// ... and pass it into another method, that will produce VeryBusinessObject (optional, of course)
+    return anotherServiceMethod(businessObjectGetter);
 }
 
 @Deprecated
 @OldLegacyCode
-private String readSomeAncientSettingEntryFromAncientSettingFile() {
-    return new ExceptionToDefaultWrapper("default-value").wrap(() -> Files.readAllLines("/home/admin/trash/config.cfg").get(0)); // we've just instantiated wrapper in place, though it is not very efficient, to wrap all exceptions occured while reading this moldy file and even possible IndexOutOfBoundException, accessing result list, to "default-value"
+private String readSomeAncientSettingEntryFromAncientSettingFile() {  
+    return new ExceptionToDefaultWrapper("default-value")
+               .wrap(() -> Files.readAllLines("/home/admin/trash/config.cfg")
+               .get(0));
+    /*  
+        We've just instantiated wrapper in place, though it is not very efficient, 
+        to wrap all exceptions occured while reading this moldy file and even possible IndexOutOfBoundException,
+        accessing result list, to "default-value" 
+    */
 }
 ```
