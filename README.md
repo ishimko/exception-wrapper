@@ -73,8 +73,7 @@ public Optional<VeryBusinessObject> getSomethingFromSomewhere() {
 @OldLegacyCode
 private String readSomeAncientSettingEntryFromAncientSettingFile() {  
     return new ExceptionToDefaultWrapper("default-value")
-               .wrap(() -> Files.readAllLines("/home/admin/trash/config.cfg")
-               .get(0));
+               .wrap(() -> Files.readAllLines("/home/admin/trash/config.cfg").get(0));
     /*  
         We've just instantiated wrapper in place, though it is not very efficient, 
         to wrap all exceptions occured while reading this moldy file and even possible IndexOutOfBoundException,
